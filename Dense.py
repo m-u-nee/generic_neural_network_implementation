@@ -8,6 +8,8 @@ class Dense(Layer):
         self.weights_gradient = np.zeros(self.weights.shape)
         self.bias_gradient = np.zeros(self.bias.shape)
         self.regularization = regularization
+        self.num_neurons = output_size
+        self.input_dim = input_size
     def forward(self, input):
         self.input = input
         return np.dot(self.weights, self.input) + self.bias
@@ -25,3 +27,6 @@ class Dense(Layer):
         self.bias -= learning_rate*(self.bias_gradient/batch_size)
         self.weights_gradient = np.zeros(self.weights.shape)
         self.bias_gradient = np.zeros(self.bias.shape)
+
+    def get_num_neurons(self):
+        return self.num_neurons
