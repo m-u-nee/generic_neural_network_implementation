@@ -1,6 +1,6 @@
 from Layer import Layer
 import numpy as np
-
+from PIL import Image, ImageDraw, ImageFont
 class Activation(Layer):
 
     def __init__(self, activation, activation_prime):
@@ -24,6 +24,42 @@ class Tanh(Activation):
             return 1 - np.tanh(x) ** 2
 
         super().__init__(tanh, tanh_prime)
+        self.image = self.generate_image(img_text="Tanh Layer")  # Add this line to generate an image
+
+    def generate_image(self, img_text="Tanh Layer"):
+        # Define image parameters
+        image_width = 100
+        image_height = 800
+        background_color = (0, 0, 0)
+        activation_color = (255, 255, 255)
+
+        # Create a blank image
+        image = Image.new("RGB", (image_width, image_height), background_color)
+        draw = ImageDraw.Draw(image)
+
+        # Calculate the position of the activation function symbol
+        activation_x = image_width // 2
+        activation_y = image_height // 2
+
+        # Draw the activation function symbol (you can customize this)
+        font = ImageFont.load_default()
+        activation_text = "Tanh"  # Customize the text if needed
+        text_size = font.getbbox(activation_text)
+        text_x = activation_x - text_size[0] - text_size[2] // 2
+        text_y = activation_y - text_size[1] // 2
+        draw.text((text_x, text_y), activation_text, fill=activation_color, font=font)
+
+        # Add the input text above the image
+        text_size = font.getbbox(img_text)
+        text_x = image_width // 2 - text_size[0] - text_size[2] // 2
+        text_y = 10  # Adjust the vertical position as needed
+        draw.text((text_x, text_y), img_text, fill=activation_color, font=font)
+
+        return image
+
+# Example usage
+tanh_layer = Tanh()
+tanh_layer.image.show()
 
 
 class Sigmoid(Activation):

@@ -1,37 +1,22 @@
-import networkx as nx
-import matplotlib.pyplot as plt
-from Dense import Dense
+import numpy as np
+from PIL import Image, ImageDraw, ImageFont
 from Activations import Tanh
-import networkx as nx
-import matplotlib.pyplot as plt
+from Dense import Dense
+
+def visualize_network(layers):
+    total_width = sum(layer.image.width for layer in layers)
+    max_height = max(layer.image.height for layer in layers)
+
+    # Create a blank image to hold the entire network visualization
+    network_image = Image.new("RGB", (total_width, max_height), (0, 0, 0))
+    x_offset = 0
+
+    for layer in layers:
+        network_image.paste(layer.image, (x_offset, (max_height - layer.image.height) // 2))
+        x_offset += layer.image.width
+
+    
+
+    network_image.show()
 
 
-def visualize_network(network):
-    G = nx.DiGraph()
-    node_count = 0
-
-    for i, layer in enumerate(network):
-        if isinstance(layer, Dense):
-            # Add nodes for the neurons in the current layer
-            for _ in range(layer.num_neurons):
-                G.add_node(node_count)
-                node_count += 1
-
-            # Add edges from the neurons in the previous layer to the neurons in the current layer
-            if i > 0:
-                for src in range(node_count - layer.num_neurons, node_count):
-                    for dst in range(node_count, node_count + layer.input_dim):
-                        G.add_edge(src, dst)
-
-    nx.draw(G, with_labels=True)
-    plt.show()
-
-network = [
-    Dense(5,10),
-    Tanh(),
-    Dense(10, 5),
-    Tanh()
-]
-
-# Example usage
-visualize_network(network)
