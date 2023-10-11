@@ -14,9 +14,14 @@ def visualize_network(layers):
     for layer in layers:
         network_image.paste(layer.image, (x_offset, (max_height - layer.image.height) // 2))
         x_offset += layer.image.width
+        # Add white line to separate layers
+        draw = ImageDraw.Draw(network_image)
+        draw.line((x_offset, 0, x_offset, max_height), fill=(255, 255, 255), width=1)
+        x_offset += 1
+
 
     
 
-    network_image.show()
+    return network_image
 
 
