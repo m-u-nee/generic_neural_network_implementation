@@ -57,9 +57,16 @@ class Tanh(Activation):
 
         return image
 
-# Example usage
-tanh_layer = Tanh()
-tanh_layer.image.show()
+class Linear(Activation):
+    def __init__(self):
+        def linear(x):
+            return x
+
+        def linear_prime(x):
+            return 1
+
+        super().__init__(linear, linear_prime)
+        
 
 
 class Sigmoid(Activation):
