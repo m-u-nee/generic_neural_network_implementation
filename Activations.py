@@ -14,19 +14,7 @@ class Activation(Layer):
     def backward(self,output_gradient):
         return np.multiply(output_gradient, self.activation_prime(self.input))
 
-
-class Tanh(Activation):
-    def __init__(self):
-        def tanh(x):
-            return np.tanh(x)
-
-        def tanh_prime(x):
-            return 1 - np.tanh(x) ** 2
-
-        super().__init__(tanh, tanh_prime)
-        self.image = self.generate_image(img_text="Tanh Layer")  # Add this line to generate an image
-
-    def generate_image(self, img_text="Tanh Layer"):
+    def generate_image(self, activation_text, img_text):
         # Define image parameters
         image_width = 100
         image_height = 800
@@ -41,9 +29,8 @@ class Tanh(Activation):
         activation_x = image_width // 2
         activation_y = image_height // 2
 
-        # Draw the activation function symbol (you can customize this)
+        # Draw the activation function symbol
         font = ImageFont.load_default()
-        activation_text = "Tanh"  # Customize the text if needed
         text_size = font.getbbox(activation_text)
         text_x = activation_x - text_size[0] - text_size[2] // 2
         text_y = activation_y - text_size[1] // 2
@@ -57,6 +44,18 @@ class Tanh(Activation):
 
         return image
 
+
+class Tanh(Activation):
+    def __init__(self):
+        def tanh(x):
+            return np.tanh(x)
+
+        def tanh_prime(x):
+            return 1 - np.tanh(x) ** 2
+
+        super().__init__(tanh, tanh_prime)
+        self.image = self.generate_image("Tanh", "Tanh Layer")
+
 class Linear(Activation):
     def __init__(self):
         def linear(x):
@@ -66,6 +65,7 @@ class Linear(Activation):
             return 1
 
         super().__init__(linear, linear_prime)
+        self.image = self.generate_image("Linear", "Linear Layer")
         
 
 
@@ -79,6 +79,7 @@ class Sigmoid(Activation):
             return s * (1 - s)
 
         super().__init__(sigmoid, sigmoid_prime)
+        self.image = self.generate_image("Sigmoid", "Sigmoid Layer")
 
 class Softmax(Layer):
     def forward(self, input):
@@ -87,10 +88,32 @@ class Softmax(Layer):
         return self.output
     
     def backward(self, output_gradient):
-        # This version is faster than the one presented in the video
         n = np.size(self.output)
         return np.dot((np.identity(n) - self.output.T) * self.output, output_gradient)
-        # Original formula:
-        # tmp = np.tile(self.output, n)
-        # return np.dot(tmp * (np.identity(n) - np.transpose(tmp)), output_gradient)
+    
+    
         
+class ReLu(Activation):
+    def __init__(self):
+        def relu(x):
+            return np.maximum(0, x)
+
+        def relu_prime(x):
+            return np.where(x > 0, 1, 0)
+
+        super().__init__(relu, relu_prime)
+        self.image = self.generate_image("ReLU", "ReLU Layer")        
+    
+    # Custom activations that is just 0 for negative values and 1 for positive values
+class Binary(Activation):
+    def __init__(self):
+        def binary(x):
+            return np.where(x > 0, 1, 0)
+
+        def binary_prime(x):
+            return np.where(x > 0, 1, 0)
+
+        super().__init__(binary, binary_prime)
+        self.image = self.generate_image("Binary", "Binary Layer")
+
+    
