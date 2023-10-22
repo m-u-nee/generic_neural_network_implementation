@@ -104,7 +104,6 @@ class ReLu(Activation):
         super().__init__(relu, relu_prime)
         self.image = self.generate_image("ReLU", "ReLU Layer")        
     
-    # Custom activations that is just 0 for negative values and 1 for positive values
 class Binary(Activation):
     def __init__(self):
         def binary(x):
