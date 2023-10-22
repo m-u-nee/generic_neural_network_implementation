@@ -116,4 +116,41 @@ class Binary(Activation):
         super().__init__(binary, binary_prime)
         self.image = self.generate_image("Binary", "Binary Layer")
 
+class LeakyReLU(Activation):
+    def __init__(self):
+        def leaky_relu(x):
+            return np.where(x > 0, x, x * 0.01)
+
+        def leaky_relu_prime(x):
+            return np.where(x > 0, 1, 0.01)
+
+        super().__init__(leaky_relu, leaky_relu_prime)
+        self.image = self.generate_image("Leaky ReLU", "Leaky ReLU Layer")
+
+
+class ELU(Activation):
+    def __init__(self):
+        def elu(x):
+            return np.where(x > 0, x, np.exp(x) - 1)
+
+        def elu_prime(x):
+            return np.where(x > 0, 1, np.exp(x))
+
+        super().__init__(elu, elu_prime)
+        self.image = self.generate_image("ELU", "ELU Layer")
+
+class SELU(Activation):
+    def __init__(self):
+        def selu(x):
+            return np.where(x > 0, 1.0507 * x, 1.0507 * 1.67326 * (np.exp(x) - 1))
+
+        def selu_prime(x):
+            return np.where(x > 0, 1.0507, 1.0507 * 1.67326 * np.exp(x))
+
+        super().__init__(selu, selu_prime)
+        self.image = self.generate_image("SELU", "SELU Layer")
+
+
+
+
     
