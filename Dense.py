@@ -24,7 +24,7 @@ class Dense(Layer):
         self.weights_gradient += np.dot(output_gradient, self.input.T) + 2 * self.regularization * self.weights
         self.bias_gradient += output_gradient
         input_gradient = np.dot(self.weights.T, output_gradient)
-        return input_gradient
+        return input_gradient 
     
     def update(self, learning_rate, batch_size):
         self.weights -= learning_rate * (self.weights_gradient / batch_size)
